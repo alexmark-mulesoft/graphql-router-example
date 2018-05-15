@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:graphql="http://www.mulesoft.org/schema/mule/graphql"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/graphql http://www.mulesoft.org/schema/mule/graphql/current/mule-graphql.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="08029f20-5bde-4a26-b867-10acc0725fdd" >
+		<http:listener-connection host="localhost" port="8082" />
+	</http:listener-config>
+	<graphql:config name="Graphql_Config" doc:name="Graphql Config" doc:id="3cde2387-fdc9-4cdd-857e-d41c94923e87" configName="graphql" schemaLocation="schema.graphqls"/>
+	<flow name="graphqlFlow" doc:id="e0b9b275-117f-4a0e-87f4-69b428dcef31" >
+		<http:listener doc:name="Listener" doc:id="8b060a1a-7e94-4d37-88a7-74e969d092ce" config-ref="HTTP_Listener_config" path="/"/>
+		<graphql:router doc:name="GraphQL Router" doc:id="3cde2387-fdc9-4cdd-857e-d41c94923e87" payload="#[payload]" config-ref="Graphql_Config"/>
+	</flow>
+	<flow name="graphql:car" doc:id="a7c9dd1a-1426-42da-9bf9-b89582be9bae" >
+		<graphql:graphql-field-resolver doc:name="Graphql field resolver" doc:id="afbcabee-ddb7-470e-be86-a1de542c2ba5" config-ref="Graphql_Config" fieldName="car">
+		</graphql:graphql-field-resolver>
+		<ee:transform doc:name="Transform Message" doc:id="f1c7f572-f382-425e-bc62-87da6227dee2" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	make:"Alex's Car",
+	model: "GTI"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="graphql:person" doc:id="a7c9dd1a-1426-42da-9bf9-b89582be9bae" >
+		<graphql:graphql-field-resolver doc:name="Copy_of_Graphql field resolver" doc:id="afbcabee-ddb7-470e-be86-a1de542c2ba5" config-ref="Graphql_Config" fieldName="person" />
+		<ee:transform doc:name="Copy_of_Transform Message" doc:id="f1c7f572-f382-425e-bc62-87da6227dee2" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	name: 'Alex',
+	age: 35,
+	active: true
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
