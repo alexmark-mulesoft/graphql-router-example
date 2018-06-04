@@ -10,9 +10,39 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 		<http:listener-connection host="localhost" port="8082" />
 	</http:listener-config>
 	<graphql:config name="Graphql_Config" doc:name="Graphql Config" doc:id="3cde2387-fdc9-4cdd-857e-d41c94923e87" configName="graphql" schemaLocation="schema.graphqls"/>
+	<http:request-config name="InventorySystemAPI" doc:name="HTTP Request configuration" doc:id="7e340377-fa11-4ef9-95e1-842a2aed43d1" basePath="/mocks/957898bb-3c0b-469d-83d2-c4a1549f7f68" >
+		<http:request-connection protocol="HTTPS" host="mocksvc.mulesoft.com" port="443" />
+	</http:request-config>
+	<http:request-config name="StorefrontSystemAPI" doc:name="HTTP Request configuration" doc:id="929656cb-8aeb-44d5-a029-beab30cec013" basePath="/mocks/34607550-deaf-4f18-b75b-1b87c800a50e" >
+		<http:request-connection protocol="HTTPS" host="mocksvc.mulesoft.com" port="443" />
+	</http:request-config>
 	<flow name="graphqlFlow" doc:id="e0b9b275-117f-4a0e-87f4-69b428dcef31" >
 		<http:listener doc:name="Listener" doc:id="8b060a1a-7e94-4d37-88a7-74e969d092ce" config-ref="HTTP_Listener_config" path="/"/>
 		<graphql:router doc:name="GraphQL Router" doc:id="3cde2387-fdc9-4cdd-857e-d41c94923e87" payload="#[payload]" config-ref="Graphql_Config"/>
+	</flow>
+	<flow name="graphql:jean" doc:id="788b756a-025d-4b63-a46f-30aa3a18d3c1" >
+		<graphql:graphql-field-resolver doc:name="Graphql field resolver" doc:id="7adf37a6-8d98-43f4-9432-e0e2b2690e70" config-ref="Graphql_Config" fieldName="jean"/>
+		<http:request method="GET" doc:name="Request" doc:id="e0b5be0c-e325-410c-9ced-b22ab173f657" config-ref="InventorySystemAPI" path="/SF-MS/inventory/jeans/4325"/>
+		<ee:transform doc:name="Transform Message" doc:id="5c80a44a-b48a-4bfb-903f-0cdf528f13ee" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="graphql:store" doc:id="fa3e1c6e-1c87-4d8a-8325-8adbc8cb0c6c" >
+		<graphql:graphql-field-resolver doc:name="Graphql field resolver" doc:id="1d034fa4-0c08-478c-9e3b-27915f2064e9" config-ref="Graphql_Config" fieldName="store"/>
+		<http:request method="GET" doc:name="Request" doc:id="0fcb7173-617b-4bff-9dd4-00900073f57b" config-ref="StorefrontSystemAPI" path="/storefront/24"/>
+		<ee:transform doc:name="Transform Message" doc:id="c5ae98e6-0b96-4a3e-97b1-68575503b334" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
 	</flow>
 	<flow name="graphql:car" doc:id="a7c9dd1a-1426-42da-9bf9-b89582be9bae" >
 		<graphql:graphql-field-resolver doc:name="Graphql field resolver" doc:id="afbcabee-ddb7-470e-be86-a1de542c2ba5" config-ref="Graphql_Config" fieldName="car">
@@ -22,23 +52,24 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/java
 ---
+
 {
-	make:"Alex's Car",
-	model: "GTI"
+	make: "Tesla",
+	model: "Model S"
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 	</flow>
-	<flow name="graphql:person" doc:id="a7c9dd1a-1426-42da-9bf9-b89582be9bae" >
-		<graphql:graphql-field-resolver doc:name="Copy_of_Graphql field resolver" doc:id="afbcabee-ddb7-470e-be86-a1de542c2ba5" config-ref="Graphql_Config" fieldName="person" />
-		<ee:transform doc:name="Copy_of_Transform Message" doc:id="f1c7f572-f382-425e-bc62-87da6227dee2" >
+	<flow name="graphql:person" doc:id="17864ce0-3b4f-4ac9-a231-b7e3792eee3a" >
+		<graphql:graphql-field-resolver doc:name="Graphql field resolver" doc:id="1e37b8ac-483e-4c0c-8800-be1261a3afc4" config-ref="Graphql_Config" fieldName="person"/>
+		<ee:transform doc:name="Transform Message" doc:id="1966569e-b21c-4b43-a79b-1a9cdf50d259" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/java
 ---
 {
-	name: 'Alex',
-	age: 35,
+	name: "Alex",
+	age: 25,
 	active: true
 }]]></ee:set-payload>
 			</ee:message>
