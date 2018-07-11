@@ -9,7 +9,7 @@ type Query{
 	people: People,
 	address: Address,
 	store: Storefront,
-	jean: Jean
+	jeans: Jean
 }
 
 
@@ -27,7 +27,7 @@ type Storefront {
     hours: String
     address: Address
     type: String
-    jean: Jean
+    jeans: [Jean]
     active: Boolean
 }
 

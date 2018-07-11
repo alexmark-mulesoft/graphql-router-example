@@ -20,9 +20,9 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 		<http:listener doc:name="Listener" doc:id="8b060a1a-7e94-4d37-88a7-74e969d092ce" config-ref="HTTP_Listener_config" path="/"/>
 		<graphql:router doc:name="GraphQL Router" doc:id="3cde2387-fdc9-4cdd-857e-d41c94923e87" payload="#[payload]" config-ref="Graphql_Config"/>
 	</flow>
-	<flow name="graphql:jean" doc:id="788b756a-025d-4b63-a46f-30aa3a18d3c1" >
-		<graphql:graphql-field-resolver doc:name="Graphql field resolver" doc:id="7adf37a6-8d98-43f4-9432-e0e2b2690e70" config-ref="Graphql_Config" fieldName="jean"/>
-		<http:request method="GET" doc:name="Request" doc:id="e0b5be0c-e325-410c-9ced-b22ab173f657" config-ref="InventorySystemAPI" path="/SF-MS/inventory/jeans/4325"/>
+	<flow name="graphql:jeans" doc:id="788b756a-025d-4b63-a46f-30aa3a18d3c1" >
+		<graphql:graphql-field-resolver doc:name="Graphql field resolver" doc:id="7adf37a6-8d98-43f4-9432-e0e2b2690e70" config-ref="Graphql_Config" fieldName="jeans"/>
+		<http:request method="GET" doc:name="Request" doc:id="e0b5be0c-e325-410c-9ced-b22ab173f657" config-ref="InventorySystemAPI" path="/SF-MS/inventory/jeans"/>
 		<ee:transform doc:name="Transform Message" doc:id="5c80a44a-b48a-4bfb-903f-0cdf528f13ee" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
