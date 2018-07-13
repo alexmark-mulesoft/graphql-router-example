@@ -44,13 +44,13 @@
             <version>1.1.1</version>
             <classifier>mule-plugin</classifier>
         </dependency>
-        <dependency>
-            <groupId>com.mulesoft.services</groupId>
-    			<artifactId>mule-module-graphql</artifactId>
-    			<version>1.0.0-SNAPSHOT</version>
-    			<classifier>mule-plugin</classifier>
+    	<dependency>
+            <groupId>88fb3f3e-d381-4074-b373-064205d30227</groupId>
+            <artifactId>mule-module-graphql</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+            <classifier>mule-plugin</classifier>
         </dependency>
-	</dependencies>
+    </dependencies>
 
 	<repositories>
           <repository>
